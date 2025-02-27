@@ -1,13 +1,17 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { ShoppingCart, Menu, X, User, Search } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ShoppingCart, Menu, X, User, Search, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Navbar = () => {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,6 +39,13 @@ const Navbar = () => {
   const closeMenu = () => {
     setIsOpen(false);
     setSearchOpen(false);
+    setProfileMenuOpen(false);
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    closeMenu();
+    navigate('/');
   };
 
   return (
@@ -78,13 +89,63 @@ const Navbar = () => {
             >
               <Search className="h-5 w-5" />
             </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full"
-            >
-              <User className="h-5 w-5" />
-            </Button>
+            
+            {user ? (
+              <div className="relative">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-full"
+                  onClick={() => setProfileMenuOpen(!profileMenuOpen)}
+                >
+                  {user.avatar ? (
+                    <img 
+                      src={user.avatar} 
+                      alt={user.name || 'User'} 
+                      className="h-8 w-8 rounded-full object-cover"
+                    />
+                  ) : (
+                    <User className="h-5 w-5" />
+                  )}
+                </Button>
+                
+                {profileMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                    <div className="px-4 py-2 border-b border-border">
+                      <p className="text-sm font-medium">{user.name || 'User'}</p>
+                      <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                    </div>
+                    <Link
+                      to="/profile"
+                      className="block px-4 py-2 text-sm hover:bg-secondary"
+                      onClick={closeMenu}
+                    >
+                      Profile
+                    </Link>
+                    <Link
+                      to="/orders"
+                      className="block px-4 py-2 text-sm hover:bg-secondary"
+                      onClick={closeMenu}
+                    >
+                      My Orders
+                    </Link>
+                    <button
+                      className="block w-full text-left px-4 py-2 text-sm text-destructive hover:bg-secondary"
+                      onClick={handleLogout}
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link to="/login">
+                <Button variant="ghost" size="sm">
+                  Sign In
+                </Button>
+              </Link>
+            )}
+            
             <Link to="/cart">
               <Button
                 variant="ghost"
@@ -155,6 +216,68 @@ const Navbar = () => {
                   {link.name}
                 </Link>
               ))}
+              
+              {user ? (
+                <>
+                  <div className="py-2 border-t border-border">
+                    <div className="flex items-center space-x-3 mb-2">
+                      {user.avatar ? (
+                        <img 
+                          src={user.avatar} 
+                          alt={user.name || 'User'} 
+                          className="h-8 w-8 rounded-full object-cover"
+                        />
+                      ) : (
+                        <User className="h-5 w-5" />
+                      )}
+                      <div>
+                        <p className="text-sm font-medium">{user.name || 'User'}</p>
+                        <p className="text-xs text-muted-foreground">{user.email}</p>
+                      </div>
+                    </div>
+                    
+                    <Link
+                      to="/profile"
+                      className="block py-2 text-foreground hover:text-primary transition-colors"
+                      onClick={closeMenu}
+                    >
+                      Profile
+                    </Link>
+                    <Link
+                      to="/orders"
+                      className="block py-2 text-foreground hover:text-primary transition-colors"
+                      onClick={closeMenu}
+                    >
+                      My Orders
+                    </Link>
+                    <button
+                      className="flex items-center gap-2 py-2 text-destructive hover:text-destructive/80 transition-colors"
+                      onClick={handleLogout}
+                    >
+                      <LogOut className="h-4 w-4" />
+                      Sign Out
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <div className="flex flex-col gap-2 pt-2 border-t border-border">
+                  <Link
+                    to="/login"
+                    className="btn-primary text-center py-2"
+                    onClick={closeMenu}
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    to="/signup"
+                    className="btn-secondary text-center py-2"
+                    onClick={closeMenu}
+                  >
+                    Create Account
+                  </Link>
+                </div>
+              )}
+              
               <div className="flex items-center gap-4 py-2">
                 <Button
                   variant="ghost"
@@ -166,13 +289,6 @@ const Navbar = () => {
                   }}
                 >
                   <Search className="h-5 w-5" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="rounded-full"
-                >
-                  <User className="h-5 w-5" />
                 </Button>
               </div>
             </div>
