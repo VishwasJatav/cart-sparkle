@@ -291,4 +291,53 @@ const Product = () => {
                           comment: "Great product overall. The design is beautiful and it works as expected. The only reason for 4 stars instead of 5 is that shipping took longer than expected."
                         }
                       ].map((review, index) => (
-                        <div key={index} className="border
+                        <div key={index} className="border border-border rounded-lg p-6">
+                          <div className="flex items-center justify-between mb-4">
+                            <div>
+                              <h4 className="font-medium">{review.name}</h4>
+                              <p className="text-xs text-muted-foreground">{review.date}</p>
+                            </div>
+                            <div className="flex">
+                              {[...Array(5)].map((_, i) => (
+                                <span key={i} className={`${i < review.rating ? 'text-primary' : 'text-muted'}`}>★</span>
+                              ))}
+                            </div>
+                          </div>
+                          <p className="text-muted-foreground">{review.comment}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </FadeIn>
+              )}
+            </div>
+          </div>
+          
+          {/* Related Products */}
+          {relatedProducts.length > 0 && (
+            <div className="mt-20">
+              <h2 className="text-2xl font-medium mb-8">You May Also Like</h2>
+              <div className="product-grid">
+                {relatedProducts.map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    id={product.id}
+                    name={product.name}
+                    price={product.price}
+                    image={product.image}
+                    category={product.category}
+                    rating={product.rating}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </main>
+      
+      <Footer />
+    </div>
+  );
+};
+
+export default Product;
