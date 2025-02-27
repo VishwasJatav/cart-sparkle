@@ -30,10 +30,13 @@ const Cart = () => {
   useEffect(() => {
     const items = cartItems.map(item => {
       const product = products.find(p => p.id === item.id);
+      // Convert dollar to rupee (approximate conversion rate)
+      const priceInRupees = product.price * 75;
       return {
         ...product,
         quantity: item.quantity,
-        total: product.price * item.quantity
+        price: priceInRupees,
+        total: priceInRupees * item.quantity
       };
     });
     setCartProducts(items);
@@ -41,7 +44,7 @@ const Cart = () => {
   
   // Calculate subtotal
   const subtotal = cartProducts.reduce((sum, item) => sum + item.total, 0);
-  const shipping = 9.99;
+  const shipping = 749; // 9.99 USD converted to rupees
   const total = subtotal + shipping;
   
   // Update quantity
@@ -143,7 +146,7 @@ const Cart = () => {
                               <div className="md:hidden text-sm text-muted-foreground mb-1">
                                 Price:
                               </div>
-                              <span>${item.price.toFixed(2)}</span>
+                              <span>₹{item.price.toFixed(2)}</span>
                             </div>
                             
                             {/* Quantity */}
@@ -175,7 +178,7 @@ const Cart = () => {
                                 <div className="md:hidden text-sm text-muted-foreground mb-1">
                                   Total:
                                 </div>
-                                <span className="font-medium">${item.total.toFixed(2)}</span>
+                                <span className="font-medium">₹{item.total.toFixed(2)}</span>
                               </div>
                               
                               <button 
@@ -211,15 +214,15 @@ const Cart = () => {
                     <div className="space-y-4 mb-6">
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Subtotal</span>
-                        <span>${subtotal.toFixed(2)}</span>
+                        <span>₹{subtotal.toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Shipping</span>
-                        <span>${shipping.toFixed(2)}</span>
+                        <span>₹{shipping.toFixed(2)}</span>
                       </div>
                       <div className="border-t border-border pt-4 flex justify-between">
                         <span className="font-medium">Total</span>
-                        <span className="font-medium">${total.toFixed(2)}</span>
+                        <span className="font-medium">₹{total.toFixed(2)}</span>
                       </div>
                     </div>
                     

@@ -15,6 +15,9 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ id, name, price, image, category, rating }: ProductCardProps) => {
+  // Convert dollar to rupee (approximate conversion rate)
+  const priceInRupees = price * 75;
+  
   return (
     <FadeIn className="group">
       <div className="product-card overflow-hidden">
@@ -66,7 +69,7 @@ const ProductCard = ({ id, name, price, image, category, rating }: ProductCardPr
           </div>
           
           <div className="flex items-center justify-between mt-2">
-            <span className="font-medium">${price.toFixed(2)}</span>
+            <span className="font-medium">₹{priceInRupees.toFixed(2)}</span>
             <Button 
               size="sm" 
               className="rounded-full h-8 w-8 p-0"

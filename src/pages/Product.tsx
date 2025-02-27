@@ -53,6 +53,9 @@ const Product = () => {
     );
   }
 
+  // Convert dollar to rupee (approximate conversion rate)
+  const priceInRupees = product.price * 75;
+
   const handleIncrementQuantity = () => {
     setQuantity(prev => prev + 1);
   };
@@ -120,7 +123,7 @@ const Product = () => {
                     <span className="text-muted-foreground">({product.rating})</span>
                   </div>
                   
-                  <p className="text-2xl font-medium mb-6">${product.price.toFixed(2)}</p>
+                  <p className="text-2xl font-medium mb-6">₹{priceInRupees.toFixed(2)}</p>
                   
                   <p className="text-muted-foreground mb-8">
                     {product.description}
