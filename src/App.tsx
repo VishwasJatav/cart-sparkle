@@ -11,6 +11,8 @@ import Cart from '@/pages/Cart';
 import Contact from '@/pages/Contact';
 import Login from '@/pages/Login';
 import Signup from '@/pages/Signup';
+import Profile from '@/pages/Profile';
+import Orders from '@/pages/Orders';
 import NotFound from '@/pages/NotFound';
 import './App.css';
 
@@ -37,6 +39,8 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/orders" element={<Orders />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Toaster />
